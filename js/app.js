@@ -7,23 +7,22 @@
 		},
 		listeners : function(){
 			$('#putArticle').on('click', app.functionAjax);
-			$('#converter').on('click', app.printArticle(app.printArticle.res));
-		},
-		functionAjax : function(){
-			$.ajax('http://192.168.1.21:1337/alice.md')
-			.done(function(response){
-				$('#montreMoi').html(response)
-			})
-			.fail(app.failed())
-			.always(app.always());
 			
 		},
-		printArticle : function(){
-			console.log();
+		functionAjax : function(){
+			$.ajax('http://192.168.1.40:1337/alice.md')
+			.done(app.success)
+			.fail(app.failed)
+			.always(app.always);
+			
 		},
 		success : function(response){
-			console.log(response);
-			console.log('réussi');
+			var converter = new showdown.Converter(),
+			text = response,
+			html = converter.makeHtml(text);
+			$('#md').html(html);
+			console.log(text);
+			
 		},
 		failed : function(){
 			console.log('échec');
@@ -31,26 +30,7 @@
 		always : function(){
 			
 		},
-		converter : function(alice){
-			var converter = new showdown.Converter(),
-			text = alice,
-			html = converter.makeHtml(text);
-			$('#md').html(html);
-		}	
-
-		
 	}
-
-
-
-
-
-
-
-
-
-
-
 	$(document).ready(function(){
 		app.init();
 	});
